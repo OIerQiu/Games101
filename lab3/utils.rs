@@ -176,15 +176,14 @@ pub fn phong_fragment_shader(payload: &FragmentShaderPayload) -> V3f {
     for light in lights {
         // TODO: For each light source in the code, calculate what the *ambient*, *diffuse*, and *specular* 
         // components are. Then, accumulate that result on the *result_color* object.
-        let e = eye_pos - point;
-        let l = light.position - point;
-        let m = (e.normalize() + l.normalize()).normalize();
-        let r_2:f64 = l.dot(&l);
+        let e = (eye_pos - point).normalize();
+        let l = (light.position - point).normalize();
+        let h = (e + l).normalize();
+        let light_vector = light.position - point;
+        let intens = light.intensity/light_vector.dot(&light_vector);
         let ambient = ka.component_mul(&amb_light_intensity);
-        let intens = light.intensity/r_2;
-        let normm = l.normalize();
-        let diffuse = kd.component_mul(&intens)*(0.0 as f64).max(normal.normalize().dot(&normm));
-        let specular = ks.component_mul(&intens)*(0.0 as f64).max(normal.normalize().dot(&m)).powf(p);
+        let diffuse = kd.component_mul(&intens)*(0.0 as f64).max(normal.dot(&l));
+        let specular = ks.component_mul(&intens)*(0.0 as f64).max(normal.dot(&h)).powf(p);
         result_color += ambient + diffuse + specular;
     }
     result_color * 255.0
@@ -224,15 +223,14 @@ pub fn texture_fragment_shader(payload: &FragmentShaderPayload) -> V3f {
     for light in lights {
         // TODO: For each light source in the code, calculate what the *ambient*, *diffuse*, and *specular* 
         // components are. Then, accumulate that result on the *result_color* object.
-        let e = eye_pos - point;
-        let l = light.position - point;
-        let m = (e.normalize() + l.normalize()).normalize();
-        let r_2:f64 = l.dot(&l);
+        let e = (eye_pos - point).normalize();
+        let l = (light.position - point).normalize();
+        let h = (e + l).normalize();
+        let light_vector = light.position - point;
+        let intens = light.intensity/light_vector.dot(&light_vector);
         let ambient = ka.component_mul(&amb_light_intensity);
-        let intens = light.intensity/r_2;
-        let normm = l.normalize();
-        let diffuse = kd.component_mul(&intens)*(0.0 as f64).max(normal.normalize().dot(&normm));
-        let specular = ks.component_mul(&intens)*(0.0 as f64).max(normal.normalize().dot(&m)).powf(p);
+        let diffuse = kd.component_mul(&intens)*(0.0 as f64).max(normal.dot(&l));
+        let specular = ks.component_mul(&intens)*(0.0 as f64).max(normal.dot(&h)).powf(p);
         result_color += ambient + diffuse + specular;
     }
 
@@ -364,15 +362,14 @@ pub fn displacement_fragment_shader(payload: &FragmentShaderPayload) -> V3f {
     for light in lights {
         // TODO: For each light source in the code, calculate what the *ambient*, *diffuse*, and *specular* 
         // components are. Then, accumulate that result on the *result_color* object.
-        let e = eye_pos - point;
-        let l = light.position - point;
-        let m = (e.normalize() + l.normalize()).normalize();
-        let r_2:f64 = l.dot(&l);
+        let e = (eye_pos - point).normalize();
+        let l = (light.position - point).normalize();
+        let h = (e + l).normalize();
+        let light_vector = light.position - point;
+        let intens = light.intensity/light_vector.dot(&light_vector);
         let ambient = ka.component_mul(&amb_light_intensity);
-        let intens = light.intensity/r_2;
-        let normm = l.normalize();
-        let diffuse = kd.component_mul(&intens)*(0.0 as f64).max(normal.normalize().dot(&normm));
-        let specular = ks.component_mul(&intens)*(0.0 as f64).max(normal.normalize().dot(&m)).powf(p);
+        let diffuse = kd.component_mul(&intens)*(0.0 as f64).max(normal.dot(&l));
+        let specular = ks.component_mul(&intens)*(0.0 as f64).max(normal.dot(&h)).powf(p);
         result_color += ambient + diffuse + specular;
     }
 
