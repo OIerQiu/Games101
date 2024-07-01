@@ -145,7 +145,7 @@ impl Rasterizer {
                             }
                         }       
                         let t_color = t.color[0]*a[0]+t.color[1]*a[1]+t.color[2]*a[2];
-                        let t_normal = t.normal[0]*a[0]+t.normal[1]*a[1]+t.normal[2]*a[2];
+                        let t_normal =(  t.normal[0]*a[0]+t.normal[1]*a[1]+t.normal[2]*a[2] ).normalize();
                         let t_tex_coords = t.tex_coords[0]*a[0]+t.tex_coords[1]*a[1]+t.tex_coords[2]*a[2];
                         let payload = FragmentShaderPayload::new(&t_color, &t_normal, &t_tex_coords, match &self.texture { None =>None, Some(tex)=>Some(Rc::new(tex))});
                         let mut color = Vector3::zeros();
